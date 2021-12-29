@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body{
+            background: url("https://i.kym-cdn.com/photos/images/newsfeed/001/090/484/940.gif");
+            background-size: cover;
+        }
+        table {
+            border-collapse: collapse;
+            border: 1px solid;
+        }
+
+        td, tr, th {
+            border: 1px solid;
+        }
+    </style>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script>
+        function findAll(){
+            $.ajax({
+                type: "Get",
+                url: "http://localhost:8080/api/homes",
+                success: function (homes) {
+                    console.log(homes)
+                    display(homes)
+                },
+                error: function (error) {
+                    alert("lỗi b ưi")
+                }
+            })
+        }
+        function showCreateHome(){
+            let str = '<input type="text" id="name">\n' +
+                '        <input type="text" id="bathroom">\n' +
+                '        <select id="idCategory">'
+            $.ajax({
+                type: "Get",
+                url: "http://localhost:8080/api/homes/category",
+                success: function (categorys) {
+                    console.log(categorys)
+                    for (let i = 0; i < categorys.length; i++) {
+                        str += ` <option value="${categorys[i].id}">${categorys[i].name}</option>`
+                    }
+                    str += '</select> <button onclick="saveHome()">create</button>'
+                    document.getElementById("res").innerHTML = str
+                },
+                error: function (error) {
+                    alert("sai lè")
+                }
+            })
+        }
+        function saveHome(){
+            let home = {
+                name: document.getElementById("name").value,
+                bathroom: document.getElementById("bathroom").value,
+                category: {
+                    id: document.getElementById("idCategory").value
+                }
+            }
+            console.log(home)
+            $.ajax({
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                type: "POST",
+                url: "http://localhost:8080/api/homes",
+                data: JSON.stringify(home),
+                success: findAll,
+                error: function (error) {
+                    console.log(error)
+                }
+            })
+        }
+        function deleteHome(id){
+            console.log(id)
+            if(confirm("muốn xóa k nói 1 lời nào")){
+                $.ajax({
+                    type:"Delete",
+                    url:"http://localhost:8080/api/homes/"+id,
+                    success:findAll,
+                    error:function (error){
+                        alert("tạch")
+                    }
+
+                })
+            }
+
+        }
+        function showEditHome(id){
+            console.log(id)
+            let str='';
+            $.ajax({
+                type: "Get",
+                url: "http://localhost:8080/api/homes/"+id,
+                success:function (home){
+                    console.log(home)
+                    str+='<input type="text" value="' + home.name + '" id="name">\n' +
+                        '<input type="number" value="' + home.bathroom + '" id="bathroom">\n'+
+                        '<select id="idCategory">\n';
+                    $.ajax({
+                        type: "Get",
+                        url: "http://localhost:8080/api/homes/category",
+                        success: function (categorys) {
+                            console.log(categorys)
+                            for (let i = 0; i < categorys.length; i++) {
+                                str += ` <option value="${categorys[i].id}">${categorys[i].name}</option>`
+                            }
+                            str += '</select>'+ '    <button onclick="saveEdit(' + home.id + ')">Save</button>'
+                            document.getElementById("res").innerHTML = str
+                        }
+                    })
+
+                },
+                error: function (error) {
+                    console.log(error)
+                }
+            })
+        }
+        function saveEdit(id){
+            let home={
+                name:document.getElementById("name").value,
+                bathroom:document.getElementById("bathroom").value,
+                category: {
+                    id:document.getElementById("idCategory").value,
+                }
+            }
+            console.log(home)
+            $.ajax({
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                type: "Put",
+                url: "http://localhost:8080/api/homes/"+id,
+                data: JSON.stringify(home),
+                success: findAll,
+                error: function (error) {
+                    console.log(error)}
+            })
+        }
+        function findOne(id){
+            $.ajax({
+                type: "GET",
+                url: "http://localhost:8080/api/homes/" + id,
+                success: function (home) {
+                    console.log(home)
+                    document.getElementById("res").innerHTML =
+                        "<p>" + 'Tên   :   ' + home.name + "</p>" +
+                        "<p>" + 'Phòng tắm  :   ' + home.bathroom + "</p>" +
+                        "<p>" + 'Thể Loại  :   ' + home.category.name + "</p>" +
+                        "<p>" + 'Mô tả :   ' + home.category.description + "</p>"
+                }
+            })
+        }
+        function oderByBathroom(){
+            $.ajax({
+                type: "GET",
+                url: "http://localhost:8080/api/homes/orderByBathroom",
+                success: function (home) {
+                    console.log(home)
+                    display(home)
+                }
+            })
+        }
+        function Category(){
+            let str='<select id="idCategory">\n';
+            $.ajax({
+                type: "Get",
+                url: "http://localhost:8080/api/homes/category",
+                success: function (categorys) {
+                    console.log(categorys)
+                    for (let i = 0; i < categorys.length; i++) {
+                        str += ` <option value="${categorys[i].id}">${categorys[i].name}</option>`
+                    }
+                    str += '</select>'+ '    <button onclick="findByCategory(' + categorys.id + ')">Save</button>'
+                    document.getElementById("res").innerHTML = str
+                }
+            })
+        }
+        function findByCategory(){
+            let id=document.getElementById("idCategory").value;
+            $.ajax({
+                type:"GET",
+                url:"http://localhost:8080/api/homes/category/"+id,
+                success:function (students){
+                    console.log(students)
+                    display(students)
+                }
+            })
+        }
+        function findByOrderByName(){
+            $.ajax({
+                type: "Get",
+                url: "http://localhost:8080/api/homes/oderByName",
+                success: function (homes) {
+                    console.log(homes)
+                    display(homes)
+                },
+                error: function (error) {
+                    alert("lỗi b ưi")
+                }
+            })
+        }
+        function display(homes){
+            let str = "<table id='t' >\n" +
+                "    <tr>\n" +
+                "        <th> Tên</th>\n" +
+                "        <th> Phòng Tắm</th>\n" +
+                "        <th> Thể loại</th>\n" +
+                "        <th> Sửa</th>\n" +
+                "        <th> Xóa</th>\n" +
+                "        <th> Chi tiết</th>\n" +
+                "    </tr>"
+            for (let i = 0; i < homes.length; i++) {
+                str += "<tr>" + "<td>" + homes[i].name + "</td>\n" +
+                    " <td>" + homes[i].bathroom + "</td>\n" +
+                    " <td>" + homes[i].category.name + "</td>" +
+                    " <td>" + "<button onclick=\"showEditHome("+homes[i].id+")\">edit</button>\n" +"</td>" +
+                    " <td>" + "<button onclick=\"deleteHome("+homes[i].id+")\">delete</button>\n" +"</td>" +
+                    " <td>" + "<button onclick=\"findOne("+homes[i].id+")\">profile</button>"+"</td>" +
+                    "</tr>"
+            }
+            str += " </table>"
+            document.getElementById("res").innerHTML = str
+        }
+    </script>
+</head>
+<body>
+<center>
+
+
+<button onclick="findAll()">
+    Show List
+</button>
+<button onclick="showCreateHome()">
+    Create
+</button>
+<button onclick="oderByBathroom()">
+    show all > 2 Bathroom
+</button>
+<button onclick="Category()">
+    find By Category
+</button>
+<button onclick="findByOrderByName()">
+    find by order by name
+</button>
+
+
+<div id="category">
+
+</div>
+</center>
+
+<center>
+    <div id="res">
+    </div>
+</center>
+</body>
+</html>

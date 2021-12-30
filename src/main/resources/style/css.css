@@ -1,0 +1,26 @@
+.logo,.banner,#nav,.content,.footer,.product{
+    border: 1px solid;
+    border-radius: 5px;
+    border-color: #de1aa5;
+}
+.logo,.banner{
+    height: 150px;
+}
+.category{
+    background: coral;
+    border: 1px solid;
+    border-radius: 5px;
+    border-color: #de1aa5;
+}
+.footer{
+    height: 50px;
+}
+.girl{
+    height:350px;
+    width: 300px;
+}
+.ed{
+   font-size: 35px;
+}
+
+

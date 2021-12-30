@@ -88,7 +88,6 @@
 
                 })
             }
-
         }
         function showEditHome(id){
             console.log(id)
@@ -132,11 +131,11 @@
             $.ajax({
                 headers: {
                     'Accept': 'application/json',
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json' // quy định kiểu dữ liệu trả về là json cho backend sử lý
                 },
                 type: "Put",
                 url: "http://localhost:8080/api/homes/"+id,
-                data: JSON.stringify(home),
+                data: JSON.stringify(home),// chuyển đổi dữ liệu từ js thành json .
                 success: findAll,
                 error: function (error) {
                     console.log(error)}

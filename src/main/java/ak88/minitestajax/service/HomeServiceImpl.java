@@ -47,4 +47,14 @@ public class HomeServiceImpl implements HomeService {
     public Iterable<Home> findAllByOrderByNameDesc() {
         return homeRepository.findAllByOrderByNameDesc();
     }
+
+    @Override
+    public Iterable<Home> findAllByName(String name) {
+        return homeRepository.findAllByName(name);
+    }
+
+    @Override
+    public Iterable<Home> findAllByNameContaining(String name) {
+        return homeRepository.findAllByNameContaining(name);
+    }
 }

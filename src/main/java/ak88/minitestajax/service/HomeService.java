@@ -7,4 +7,7 @@ public interface HomeService extends IGeneralService<Home> {
     Iterable<Home> findAllByBathroomGreaterThan(int bathroom);
     Iterable<Home> findAllByCategory(Category category);
     Iterable<Home> findAllByOrderByNameDesc();
+    Iterable<Home> findAllByName(String name);
+    Iterable<Home> findAllByNameContaining(String name);
+
 }

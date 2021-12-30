@@ -67,5 +67,11 @@ public class HomeController {
         Iterable<Home> homes=homeService.findAllByOrderByNameDesc();
         return new ResponseEntity<>(homes,HttpStatus.OK);
     }
+    @GetMapping("search")
+    public ResponseEntity<Iterable<Home>> findByName(String key){
+        Iterable<Home> homes=homeService.findAllByNameContaining(key);
+        return new ResponseEntity<>(homes,HttpStatus.OK);
+
+    }
 
 }

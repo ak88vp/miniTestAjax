@@ -21,13 +21,20 @@ public class CityController {
     NationService nationService;
 
     @GetMapping("")
-    public ResponseEntity<Iterable<City>> findAll(){
-        Iterable<City> cities= cityService.findAll();
+    public ResponseEntity<Iterable<City>> findAll() {
+        Iterable<City> cities = cityService.findAll();
         return new ResponseEntity<>(cities, HttpStatus.OK);
     }
+
     @GetMapping("/{id}")
-    public ResponseEntity<City> findOne(@PathVariable Long id){
-        Optional<City> city=cityService.findById(id);
-        return new ResponseEntity<>(city.get(),HttpStatus.OK);
+    public ResponseEntity<City> findOne(@PathVariable Long id) {
+        Optional<City> city = cityService.findById(id);
+        return new ResponseEntity<>(city.get(), HttpStatus.OK);
+    }
+
+    @PostMapping("")
+    public ResponseEntity<City> createCity(@RequestBody  City city) {
+        cityService.save(city);
+        return new ResponseEntity<>(city, HttpStatus.CREATED);
     }
 }

@@ -43,4 +43,9 @@ public class CityController {
         cityService.save(city);
         return new ResponseEntity<>(city,HttpStatus.OK);
     }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<City> deleteCity(@PathVariable Long id){
+        cityService.remove(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

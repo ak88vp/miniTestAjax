@@ -102,5 +102,45 @@ let city ={
         }
     })
 }
+function showEdit(id){
+    let str='';
+    $.ajax({
+        type: "Get",
+        url: "http://localhost:8080/api/cities/"+id,
+        success:function (city){
+            console.log(city)
+            str+=`<div>
+  <div class="form-group ">
+  <br>
+    <label for="formGroupExampleInput">Tên Thành Phố</label>
+    <input type="text" class="form-control" id="name" value="${city.name}">
+  </div>
+  <div class="form-group">
+    <label for="formGroupExampleInput2">Phòng Tắm</label>
+    <input type="text" class="form-control" id="bathroom" value="${city.bathroom}" >
+  </div>
+  <div class="form-group b-3">
+  <label for="formGroupExampleInput2">Thể loại</label>
+  <select id="idCategory" class="form-control ">\`;`
+
+            $.ajax({
+                type: "Get",
+                url: "http://localhost:8080/api/homes/category",
+                success: function (categorys) {
+                    console.log(categorys)
+                    for (let i = 0; i < categorys.length; i++) {
+                        str += ` <option value="${categorys[i].id}">${categorys[i].name}</option>`
+                    }
+                    str += '</select> <br>'+ ' <button class="btn btn-warning" onclick="saveEdit1(' + city.id + ')">Save</button> </div>'
+                    document.getElementById("list-product").innerHTML = str
+                }
+            })
+
+        },
+        error: function (error) {
+            console.log(error)
+        }
+    })
+}
 
 

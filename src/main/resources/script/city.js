@@ -10,7 +10,7 @@ function showALL(){
                 <th scope="row">${i}</th>
                 <td>${city[i].name}</td>
                 <td>${city[i].nation.name}</td>
-                <td><button class="btn btn-success" > SỬA</button></td>
+                <td><button class="btn btn-success" onclick="showEdit(${city[i].id})" > SỬA</button></td>
                 <td><button class="btn btn-success" onclick="deleteCities(${city[i].id})"> XÓA</button></td>
                 </tr>
                 
@@ -116,23 +116,32 @@ function showEdit(id){
     <input type="text" class="form-control" id="name" value="${city.name}">
   </div>
   <div class="form-group">
-    <label for="formGroupExampleInput2">Phòng Tắm</label>
-    <input type="text" class="form-control" id="bathroom" value="${city.bathroom}" >
+    <label for="formGroupExampleInput2">Diện tích</label>
+    <input type="number" class="form-control" id="acreage" value="${city.acreage}" >
+  </div><div class="form-group">
+    <label for="formGroupExampleInput2">Dân số</label>
+    <input type="number" class="form-control" id="population" value="${city.population}" >
+  </div><div class="form-group">
+    <label for="formGroupExampleInput2">GDP</label>
+    <input type="number" class="form-control" id="GDP" value="${city.GDP}" >
+  </div><div class="form-group">
+    <label for="formGroupExampleInput2">Giới thiêu</label>
+    <input type="text" class="form-control" id="introduce" value="${city.introduce}" >
   </div>
   <div class="form-group b-3">
   <label for="formGroupExampleInput2">Thể loại</label>
-  <select id="idCategory" class="form-control ">\`;`
+  <select id="idNation" class="form-control ">\`;`
 
             $.ajax({
                 type: "Get",
-                url: "http://localhost:8080/api/homes/category",
-                success: function (categorys) {
-                    console.log(categorys)
-                    for (let i = 0; i < categorys.length; i++) {
-                        str += ` <option value="${categorys[i].id}">${categorys[i].name}</option>`
+                url: "http://localhost:8080/api/cities/nation",
+                success: function (nation) {
+                    console.log(nation)
+                    for (let i = 0; i < nation.length; i++) {
+                        str += ` <option value="${nation[i].id}">${nation[i].name}</option>`
                     }
-                    str += '</select> <br>'+ ' <button class="btn btn-warning" onclick="saveEdit1(' + city.id + ')">Save</button> </div>'
-                    document.getElementById("list-product").innerHTML = str
+                    str += '</select> <br>'+ ' <button class="btn btn-warning" onclick="saveCity(' + city.id + ')">Save</button> </div>'
+                    document.getElementById("content").innerHTML = str
                 }
             })
 
@@ -142,5 +151,31 @@ function showEdit(id){
         }
     })
 }
+function saveCity(id){
+    let city={
+        name:document.getElementById("name").value,
+        acreage:document.getElementById("acreage").value,
+        population:document.getElementById("population").value,
+        GDP:document.getElementById("GDP").value,
+        introduce:document.getElementById("introduce").value,
+        nation:{
+            id:document.getElementById("idNation").value
+        }
+    }
+    console.log(city)
+    $.ajax({
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json' // Thông báo kiểu dữ liệu trả về là json cho backend sử lý
+        },
+        type: "Put",
+        url: "http://localhost:8080/api/cities/"+id,
+        data: JSON.stringify(city),// chuyển đổi dữ liệu từ js thành json .
+        success: showALL,
+        error: function (error) {
+            console.log(error)}
+    })
+}
+
 
 

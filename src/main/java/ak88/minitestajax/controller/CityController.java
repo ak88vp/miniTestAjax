@@ -1,9 +1,14 @@
 package ak88.minitestajax.controller;
 
+import ak88.minitestajax.model.City;
+import ak88.minitestajax.model.Home;
 import ak88.minitestajax.service.CityService;
 import ak88.minitestajax.service.NationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,4 +21,9 @@ public class CityController {
     @Autowired
     NationService nationService;
 
+    @GetMapping("")
+    public ResponseEntity<Iterable<City>> findAll(){
+        Iterable<City> cities= cityService.findAll();
+        return new ResponseEntity<>(cities, HttpStatus.OK);
+    }
 }

@@ -28,6 +28,7 @@ public class HomeController {
     @GetMapping("/{id}")
     public ResponseEntity<Home> findById(@PathVariable Long id){
         Optional<Home> home=homeService.findById(id);
+
         return new ResponseEntity<>(home.get(),HttpStatus.OK);
     }
     @GetMapping("category")

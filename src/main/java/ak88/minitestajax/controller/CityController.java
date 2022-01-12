@@ -37,4 +37,10 @@ public class CityController {
         cityService.save(city);
         return new ResponseEntity<>(city, HttpStatus.CREATED);
     }
+    @PutMapping("/{id}")
+    public ResponseEntity<City> updateCity(@PathVariable Long id,@RequestBody City city){
+        city.setId(cityService.findById(id).get().getId());
+        cityService.save(city);
+        return new ResponseEntity<>(city,HttpStatus.OK);
+    }
 }

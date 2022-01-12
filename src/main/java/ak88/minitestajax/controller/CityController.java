@@ -2,6 +2,7 @@ package ak88.minitestajax.controller;
 
 import ak88.minitestajax.model.City;
 import ak88.minitestajax.model.Home;
+import ak88.minitestajax.model.Nation;
 import ak88.minitestajax.service.CityService;
 import ak88.minitestajax.service.NationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,5 +48,10 @@ public class CityController {
     public ResponseEntity<City> deleteCity(@PathVariable Long id){
         cityService.remove(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @GetMapping("/nation")
+    public ResponseEntity<Iterable<Nation>> findAllNation(){
+        Iterable<Nation> nations=nationService.findAll();
+        return new ResponseEntity<>(nations,HttpStatus.OK);
     }
 }
